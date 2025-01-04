@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Tool</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>簡易セキュリティ診断ツール</h1>
+
+    <!-- URLスキャンフォーム -->
+    <form id="url-scan-form">
+        <input type="text" name="url" placeholder="診断したいURLを入力" required>
+        <button type="submit">URLスキャン</button>
+    </form>
+    <div id="url-scan-result"></div>
+
+    <!-- ポートスキャンフォーム -->
+    <form id="port-scan-form">
+        <input type="text" name="host" placeholder="診断したいホスト/IPを入力" required>
+        <button type="submit">ポートスキャン</button>
+    </form>
+    <div id="port-scan-result"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // URLスキャン
+        document.getElementById('url-scan-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/scan_url', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('url-scan-result').innerText = JSON.stringify(result, null, 2);
+        };
+
+        // ポートスキャン
+        document.getElementById('port-scan-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/scan_ports', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('port-scan-result').innerText = JSON.stringify(result, null, 2);
+        };
+    </script>
+</body>
+</html>
